@@ -159,7 +159,7 @@ class SubMapper(SubMapperParent):
                 if isinstance(value, dict):
                     newkargs[key] = dict(value, **kwargs[key]) # merge dicts
                 else:
-                    newkargs[key] = value + kwargs[key]
+                    newkargs[key] = kwargs[key]
             else:
                 newkargs[key] = self.kwargs[key]
         for key in kwargs:
