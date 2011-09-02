@@ -1,6 +1,12 @@
 Routes Changelog
 %%%%%%%%%%%%%%%%
 
+Release 1.12.4-pb (Sept 2, 2011)
+=============================
+* First pybald-routes release of the fork of the official project.
+* Changed the behavior of nested submappers to override passed kw args rather
+  than concatenating them.
+
 Release 1.12.3 (June 5, 2010)
 =============================
 * Fix bug with URLGenerator not properly including SCRIPT_NAME when generating
