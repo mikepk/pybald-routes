@@ -144,27 +144,48 @@ class SubMapper(SubMapperParent):
             if self.formatted is None:
                 self.formatted = True
 
-        self.add_actions(actions or [])
-        
+        self.add_actions(actions or [], **kwargs)
+
     def connect(self, *args, **kwargs):
         newkargs = {}
-        newargs = args
+        # newargs = args
+
+        # if the positional arguments are > 1 then a route name
+        # has been specified in position 0
+        # if len(args) > 1:
+        #     routename = (self.name_prefix or "") + args[0]
+        routename, path = args
         for key, value in self.kwargs.items():
             if key == 'path_prefix':
                 if len(args) > 1:
-                    newargs = (args[0], self.kwargs[key] + args[1])
+                    # if there's a name_prefix, add it to the route name
+                    # and if there's a path_prefix
+                    path = ''.join((self.kwargs[key], args[1]))
+                    # newargs = (args[0], self.kwargs[key] + args[1])
                 else:
-                    newargs = (self.kwargs[key] + args[0],)
+                    path = ''.join((self.kwargs[key], args[0]))
+                    # newargs = (self.kwargs[key] + args[0],)
+            elif key == 'name_prefix':
+                if len(args) > 1:
+                    # if there's a name_prefix, add it to the route name
+                    # and if there's a path_prefix
+                    routename = ''.join((self.kwargs[key], args[0]))
+                else:
+                    routename = None #(self.kwargs[key] + args[0],)
             elif key in kwargs:
                 if isinstance(value, dict):
                     newkargs[key] = dict(value, **kwargs[key]) # merge dicts
                 else:
+                    # Old Form
+                    # newkargs[key] = value + kwargs[key]
                     newkargs[key] = kwargs[key]
             else:
                 newkargs[key] = self.kwargs[key]
         for key in kwargs:
             if key not in self.kwargs:
                 newkargs[key] = kwargs[key]
+
+        newargs = (routename, path)
         return self.obj.connect(*newargs, **newkargs)
 
     def link(self, rel=None, name=None, action=None, method='GET',
