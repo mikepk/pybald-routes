@@ -3,3 +3,6 @@
 ._*
 *.pid
 *.log
+*.egg-info
+build/
+dist/

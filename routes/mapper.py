@@ -111,7 +111,19 @@ class SubMapperParent(object):
             controller = resource_name or collection_name
 
         if path_prefix is None:
-            path_prefix = '/' + collection_name
+            if collection_name is None:
+                path_prefix_str = ''
+            else:
+                path_prefix_str = '/{collection_name}'
+        else:
+            if collection_name is None:
+                path_prefix_str = "{pre}"
+            else:
+                path_prefix_str = "{pre}/{collection_name}"
+
+        # generate what will be the path prefix for the collection
+        path_prefix = path_prefix_str.format(pre=path_prefix,
+                                             collection_name=collection_name)
 
         collection = SubMapper(self, collection_name=collection_name,
                                resource_name=resource_name,
